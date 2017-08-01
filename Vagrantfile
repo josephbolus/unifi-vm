@@ -5,7 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "xezpeleta/wheezy64"
+  config.vm.box = "debian/jessie64"
   config.vm.network "forwarded_port", guest: 8080, host: 8080
   config.vm.network "forwarded_port", guest: 8443, host: 8443
   config.vm.network "private_network", ip: "192.168.33.12"
@@ -17,12 +17,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      vb.customize ["modifyvm", :id, "--memory", "512"]
   end
 
-  config.vm.provision :ansible do |ansible|
+  config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "provisioning/playbook.yml"
-    ansible.inventory_path = "provisioning/hosts-vagrant"
+ #   ansible.inventory_path = "provisioning/hosts-vagrant"
     ansible.limit = 'all'
-    ansible.host_key_checking = false
-    ansible.verbose = false
+ #   ansible.host_key_checking = false
+    ansible.verbose = true
   end
 
 end
+
+
